@@ -1,6 +1,7 @@
 // controllers/entTypeController.js
 
 const EntType = require('../Schemas/EntrepenureType');
+const {Logger} = require('../Functions/Logger')
 
 
 const  createEntType = async (req, res) => {

@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid'); // Ensure you have uuid installed
 const AppliedJobs = require('../Schemas/AppliedJobs'); // Adjust the path according to your project structure
 const Job = require('../Schemas/Jobs'); // Adjust the path according to your project structure
 const User = require('../Schemas/User');
+const {Logger} = require('../Functions/Logger')
 
 const createJobApplication = async (req, res) => {
   try {
@@ -16,7 +17,7 @@ const createJobApplication = async (req, res) => {
     const savedApplication = await newApplication.save();
     res.status(201).json({message:"success",data:savedApplication});
   } catch (error) {
-    console.error('Error creating job application:', error);
+    Logger('ERROR',req.url,error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -26,7 +27,7 @@ const getAllJobApplications = async (req, res) => {
     const jobApplications = await AppliedJobs.scan().exec();
     res.json({count:jobApplications.length,data:jobApplications});
   } catch (error) {
-    console.error('Error fetching job applications:', error);
+    Logger('ERROR',req.url,error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -41,7 +42,7 @@ const getJobApplications = async (req, res) => {
     }
     res.status(200).json({count:app.length,data:app});
   } catch (error) {
-    console.error('Error fetching job application:', error);
+    Logger('ERROR',req.url,error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -71,7 +72,7 @@ const getMyApplications = async (req, res) => {
     const filteredJob = myJobs.filter((e)=>e!=null)
     res.status(200).json({count:filteredJob.length,data:filteredJob});
   } catch (error) {
-    console.error('Error fetching job application:', error);
+    Logger('ERROR',req.url,error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -88,7 +89,7 @@ const deleteJobApplication = async (req, res) => {
     await AppliedJobs.delete(id);
     res.status(204).send(); // Successfully deleted, no content
   } catch (error) {
-    console.error('Error deleting job application:', error);
+    Logger('ERROR',req.url,error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

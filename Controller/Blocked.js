@@ -2,6 +2,8 @@ const BlockedUser = require('../Schemas/Blocked');
 const Subscription = require('../Schemas/Subscription');
 const User = require('../Schemas/User');
 const { v4: uuidv4 } = require('uuid');
+const {Logger} = require('../Functions/Logger')
+
 
 // Create a new blocked user entry
 const createBlockedUser = async (req, res) => {

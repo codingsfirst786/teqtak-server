@@ -6,6 +6,9 @@ const Ticket = require('../Schemas/Ticket');
 const User = require('../Schemas/User');
 const Video = require('../Schemas/Videos');
 const { v4: uuidv4 } = require('uuid');
+const {Logger} = require('../Functions/Logger')
+
+
 
   async function find_(params) {
     let scan = await User.scan();

@@ -2,6 +2,9 @@ const Review = require('../Schemas/Reviews');  // Assuming you saved your schema
 const User = require('../Schemas/User');  // Assuming you saved your schema in 'models/review.js'
 const Reply = require('../Schemas/ReviewsReply');  // Assuming you saved your schema in 'models/review.js'
 const { v4: uuidv4 } = require('uuid');
+const {Logger} = require('../Functions/Logger')
+
+
 // Create a new review
 exports.createReview = async (req, res) => {
     try {

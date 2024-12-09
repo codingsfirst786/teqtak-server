@@ -4,6 +4,7 @@ const Notification = require('../Schemas/Notifications')
 const nf = require('../Functions/Notification_Factory');
 const User = require('../Schemas/User');
 const Ticket = require('../Schemas/Ticket');
+const {Logger} = require('../Functions/Logger')
 
 
 const createEvent = async (req, res) => {

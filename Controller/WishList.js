@@ -6,6 +6,8 @@ const Video = require('../Schemas/Videos');
 const Reviews = require('../Schemas/Reviews');
 const WishList = require('../Schemas/WishList');
 const { v4: uuidv4 } = require('uuid');
+const {Logger} = require('../Functions/Logger')
+
 
 // Create a new wishlist item
 const createWishListItem = async (req, res) => {

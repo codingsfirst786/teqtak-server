@@ -4,6 +4,8 @@ const Podcast = require('../Schemas/Podcast')
 const Reviews = require('../Schemas/Reviews')
 const User = require('../Schemas/User')
 const { v4: uuidv4 } = require('uuid');
+const {Logger} = require('../Functions/Logger')
+
 
 const createView = async (req, res) => {
     try {

@@ -2,6 +2,8 @@ const dynamoose = require('dynamoose');
 const { v4: uuidv4 } = require('uuid');
 const ChatRoom = require('../Schemas/ChatRoom')
 const User = require('../Schemas/User')
+const {Logger} = require('../Functions/Logger')
+
 
 const createChatRoom = async (req, res) => {
   try {

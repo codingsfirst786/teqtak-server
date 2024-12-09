@@ -47,6 +47,12 @@ const io = new socketIo.Server(server, {
 
 // routes
 
+app.get('/ccc', (req,res)=>{
+  console.log({req})
+  // res.json({req:JSON.stringify(req)})
+})
+
+
 app.use('/', require('./Routes/GithubAuth'))
 app.use('/', require('./Routes/FacebookAuth'))
 app.use('/', require('./Routes/GoogleAuth'))

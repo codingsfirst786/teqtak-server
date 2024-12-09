@@ -1,6 +1,7 @@
 const Answer = require("../Schemas/Answers");
 const Question = require("../Schemas/Questions")
 const { v4: uuidv4 } = require('uuid');
+const {Logger} = require('../Functions/Logger')
 
 
 const getAllQues = async (req, res) => {
