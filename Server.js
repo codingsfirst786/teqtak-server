@@ -25,10 +25,14 @@ app.use(bodyParser.json({ limit:mbUploadLimit}));
 app.use(bodyParser.urlencoded({ limit:mbUploadLimit, extended: true }));
  
 
+
+const __CORS_ORIGINS__=[process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'https://teqtak-admin-panel.vercel.app','http://localhost:5173']
+
 app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   // origin: "*", // Your frontend URL
-  origin: [process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'https://teqtak-admin-panel.vercel.app' ], // Your frontend URL
+  origin: __CORS_ORIGINS__, // Your frontend URL
+  // origin: [process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'https://teqtak-admin-panel.vercel.app' ], // Your frontend URL
   credentials: true 
 })); 
 app.use(cookie())
@@ -39,7 +43,8 @@ app.use(cookie())
 const server = http.createServer(app);
 const io = new socketIo.Server(server, {
   cors: {
-    origin:  process.env.FRONT_URL, 
+    origin:  __CORS_ORIGINS__, 
+    // origin:  process.env.FRONT_URL, 
     // origin: "http://localhost:5173", // Adjust to match your React app's URL and port
   },
 });
