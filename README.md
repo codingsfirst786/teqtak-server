@@ -1,4 +1,4 @@
-# CT-AWS-Backend
+# CT-TeqTak-Server
 npm install
 pm2 restart all
 sudo nginx -t
