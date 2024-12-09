@@ -47,11 +47,6 @@ const io = new socketIo.Server(server, {
 
 // routes
 
-app.get('/ccc', (req,res)=>{
-  console.log({req})
-  // res.json({req:JSON.stringify(req)})
-})
-
 
 app.use('/', require('./Routes/GithubAuth'))
 app.use('/', require('./Routes/FacebookAuth'))
@@ -79,6 +74,7 @@ app.use('/wishlist', require('./Routes/WishList'))
 app.use('/block', require('./Routes/Blocked'))
 app.use('/info', require('./Routes/EntType'))
 app.use('/qna', require('./Routes/QueAns'))
+app.use('/payreq', require('./Routes/PaymentRequest'))
 
 
 // routes end

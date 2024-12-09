@@ -5,6 +5,4 @@ info && console.log(` INFO    ----> `,info)
 console.log("==================================================================\n")
 }
 
-Logger('success','/get/id','golden')
-
 module.exports = {Logger}
