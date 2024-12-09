@@ -14,7 +14,8 @@ const paymentSchema = new dynamoose.Schema({
   paypalId:String,
   phoneNumber:String,
   email:String,
-  amount:String
+  amount:String,
+  prefferedPayment:String
 }, {
     timestamps: true
 });
