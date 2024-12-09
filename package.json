@@ -1,0 +1,39 @@
+{
+  "scripts": {
+    "start": "nodemon ./Server"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.622.0",
+    "@aws-sdk/client-dynamodb": "^3.622.0",
+    "@aws-sdk/client-s3": "^3.621.0",
+    "@aws-sdk/credential-provider-node": "^3.621.0",
+    "@aws-sdk/credential-providers": "^3.621.0",
+    "@aws-sdk/lib-dynamodb": "^3.622.0",
+    "@aws-sdk/lib-storage": "^3.621.0",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "aws-sdk": "^2.1665.0",
+    "axios": "^1.7.5",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "dynamoose": "^4.0.1",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
+    "music-metadata": "^10.5.0",
+    "nodemailer": "^6.9.14",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth2": "^0.2.0",
+    "socket.io": "^4.7.5",
+    "stripe": "^16.8.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
