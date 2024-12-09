@@ -9,7 +9,7 @@ const paymentSchema = new dynamoose.Schema({
   userId:String,
   eventId:String,
   requestStatus:String,
-  bankAccountId:String,
+  bankAccount:String,
   stripeId:String,
   paypalId:String,
   phoneNumber:String,

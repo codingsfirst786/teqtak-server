@@ -18,11 +18,11 @@ const create=async(req,res)=>{
         const {amount,...data} = UnSafe_Data
 
         // calculate amount
-        const paymentAmount = eventRevenue(req.body.eventId)
+        const paymentAmount = await eventRevenue(req.body.eventId)
         const payReq = new PaymentRequest({
             _id:uuidv4(),
             ...data,
-            
+            requestStatus:"pending",
             amount:paymentAmount
         }) 
         await payReq.save()
@@ -47,7 +47,17 @@ const getOne=async(req,res)=>{
 }
 const getAll=async(req,res)=>{
     try {
-        const data = await PaymentRequest.scan().exec()
+        let data = await PaymentRequest.scan().exec()
+        data = await Promise.all(data.map(async(e)=>{
+            try {
+                const event = await Event.get(e.eventId) 
+                const user = await User.get(e.userId)
+                return {...e,event,user}
+            } catch (error) {
+                return null
+            }
+        }))
+        
         res.json({count:data.length,data})
         Logger('success',req.method+req.originalUrl)
     } catch (error) {
@@ -87,7 +97,7 @@ const update=async(req,res)=>{
 const eventRevenue =async(eventId)=>{
     let tickets =  await Ticket.scan('ticketEventId').eq(eventId).attributes(['totalAmount']).exec()
     tickets = tickets.map((e)=>e.totalAmount)
-    const amount =  tickets.reduce((acc, num) => acc + num, 0);
+    const amount = parseInt(( tickets.reduce((acc, num) => acc + num, 0) * .8))
     return amount.toString()
 }
 module.exports = {create,getAll,getOne,remove,update}
