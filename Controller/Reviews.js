@@ -71,12 +71,18 @@ exports.getAllVideoReviews = async (req, res) => {
         // console.log({endBucket:bucket})
 
     
-        const m =await Promise.all(reviews.map(async(e) => {
+        let m =await Promise.all(reviews.map(async(e) => {
+            try {
             let reply = []
               reply = await Reply.scan('reviewId').eq(e._id).exec() //takes review id
-              let {name,picUrl,Users_PK} = await User.get(e.userId)
-              return await {...e,sender:{name,picUrl,Users_PK,replies:reply.length}}
+              const user = await User.get(e.userId)
+              return await {...e,sender:{...user,replies:reply.length}}
+            } catch (error) {
+             return null   
+            }
           }))
+
+          m= m.filter((e)=>e!=null)
           
         // res.json({avgRating});
         res.json({totalReviews:reviewArray.length,avgStars:bucket,avgRating,reviews:m});

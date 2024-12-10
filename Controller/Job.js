@@ -2,7 +2,8 @@ const { v4: uuidv4 } = require('uuid');
 const Job = require('../Schemas/Jobs')
 const User = require('../Schemas/User')
 const find = require('../Functions/find')
-const {Logger} = require('../Functions/Logger')
+const { Logger } = require('../Functions/Logger');
+const e = require('express');
 
 
 const createJob = async (req, res) => {
@@ -36,7 +37,7 @@ const getJob = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-const getAllJobs = async (req, res) => {
+const getAllJobs__Legacy = async (req, res) => {
     try {
         const jobs = await Job.scan().exec();
         console.log("length is", jobs.length)
@@ -47,14 +48,14 @@ const getAllJobs = async (req, res) => {
                     const name = _user_?.name || ''
                     const picUrl = _user_?.picUrl || ''
                     const Users_PK = _user_?.Users_PK || ''
-                    return { poster: { name, picUrl ,Users_PK}, ...e }
+                    return { poster: { name, picUrl, Users_PK }, ...e }
                 }
                 else {
                     return {
                         poster: {
                             name: '',
                             picUrl: '',
-                            Users_PK:""
+                            Users_PK: ""
                         }
                         , ...e
                     }
@@ -69,6 +70,31 @@ const getAllJobs = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+const getAllJobs = async (req, res) => {
+    try {
+        const jobs = await Job.scan().exec();
+        if (jobs.length > 0) {
+            let poster = await Promise.all(jobs.map(async (e) => {
+                try {
+                        const _user_ = await User.get(e.userId);
+                        return { poster: _user_, ...e }
+
+                } catch (error) {
+                    return null
+                }
+            }))
+            poster = poster.filter((e)=>e!= null)
+            res.status(200).json({ count: poster.length, data: poster });
+        }
+        else {
+            res.status(200).json({ count: jobs.length, data: jobs })
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 const updateJob = async (req, res) => {
     try {
         console.log(req.body)

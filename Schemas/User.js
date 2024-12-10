@@ -32,7 +32,7 @@ const userSchema = new dynamoose.Schema({
     country: {
         type: String,
     },
-    number: {
+    phoneNumber: {
         type: String,
     },
     description: {
