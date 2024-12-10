@@ -50,14 +50,9 @@ router.get('/my/:id', async (req, res) => {
         const subscriptions = await Subscription.scan('subscribedToId').eq(id).exec();
         const data = await Promise.all(subscriptions.map(async (e) =>{
             const user = await User.get(e.subscriberId)
-            const picUrl=user?.picUrl?user.picUrl:null
-            const name=user?.name?user.name:null  
-            const Users_PK=user?.Users_PK?user.Users_PK:null
             return {
-                ...e,user:{picUrl,name,Users_PK}  
-             }
-                // ...e,user:{picUrl,name,Users_PK,...user}  }
-                
+                ...e,user  
+             }                
             }))
         const filterData=data.filter((e)=>e.user.Users_PK!=null)
         res.status(200).json(filterData);
@@ -73,11 +68,8 @@ router.get('/:id', async (req, res) => {
         const subscriptions = await Subscription.scan('subscriberId').eq(id).exec();
         const data = await Promise.all(subscriptions.map(async (e) =>{
             const user = await User.get(e.subscribedToId)
-            const picUrl=user?.picUrl?user.picUrl:null
-            const name=user?.name?user.name:null  
-            const Users_PK=user?.Users_PK?user.Users_PK:null
             return {
-                ...e,user:{picUrl,name,Users_PK}  
+                ...e,user  
         }}))
         const filterData=data.filter((e)=>e.user.Users_PK!=null)
         res.status(200).json(filterData);
