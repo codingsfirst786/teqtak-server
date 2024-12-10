@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 const { Mail_Factroy } = require("../Mail/Mail_Factory")
 const { v4: uuidv4 } = require('uuid');
 const {Logger} = require('../Functions/Logger')
+const { get } = require('../Mail/transport')
 
 
 
@@ -54,10 +55,24 @@ const getMyTickets = async (req, res) => {
 const getEventTickets = async (req, res) => {
     try {
         const id = req.params.id
+        const event = await Event.get(id)
+        const poster = await User.get(event.eventCreatedBy)
+        // console.log({poster})    
         const ticket = await Ticket.scan('ticketEventId').eq(id).exec()
+        let data = await Promise.all(ticket.map(async(e)=>{
+            try {
+                const buyer = await User.get(e.ticketBuyerId)
+                return {...e,buyer}
+            } catch (error) {
+                return null
+            }
+        }))
+        data = data.filter((e)=>e!=null)
         res.json({
-            count: ticket.length,
-            data: ticket
+            count: data.length,
+            poster,
+            event,
+            data: data
         })
 
     } catch (error) {
