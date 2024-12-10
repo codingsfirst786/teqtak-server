@@ -192,12 +192,12 @@ async function TicketMapper(eventArray) {
 
     let bigData = await Promise.all(eventArray.map(async (e,i) => {
         try{
-        const event = await Event.get(e,{ attributes: ["_id", "eventTitle",'eventCreatedBy'] })
+        const event = await Event.get(e,{ attributes: ["_id", "eventTitle",'eventCreatedBy','createdAt'] })
         const poster = await User.get(event.eventCreatedBy,{ attributes: ["name", "email","Users_PK"] })
         const ticket = await Ticket.scan('ticketEventId').eq(e).attributes(['ticketBuyerId','totalAmount']).exec()
         let data = await Promise.all(ticket.map(async (e) => {
            
-                const buyer = await User.get(e.ticketBuyerId, { attributes: ["name", "email"] })
+                const buyer = await User.get(e.ticketBuyerId, { attributes: ["name", "email","picUrl"] })
                 return { ...e, buyer }
             } 
         ))
