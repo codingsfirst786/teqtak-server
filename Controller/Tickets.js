@@ -88,7 +88,6 @@ const createTicket = async (req, res) => {
 const getATicket = async (req, res) => {
     try {
         
-  
     const ticket = await Ticket.get(req.params.id)
     const event_ = await Event.get(ticket.ticketEventId)
     const buyer_ = await User.get(ticket.ticketBuyerId)

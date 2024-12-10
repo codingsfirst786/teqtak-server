@@ -76,7 +76,7 @@ exports.getAllVideoReviews = async (req, res) => {
             let reply = []
               reply = await Reply.scan('reviewId').eq(e._id).exec() //takes review id
               const user = await User.get(e.userId)
-              return await {...e,sender:user,replies:reply.length}
+              return await {...e,sender:{...user},replies:reply.length}
             } catch (error) {
              return null   
             }
