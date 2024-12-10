@@ -9,11 +9,11 @@ router.post('/', async (req, res) => {
     try {
         const { subscriberId, subscribedToId } = req.body;
         const results = await Subscription.scan("subscriberId")
-        .eq(subscriberId) // Query based on subscriberId
-        .where("subscribedToId")
-        .eq(subscribedToId) // Query based on subscribedToId
-        .exec();
-        if(results.length==0){
+            .eq(subscriberId) // Query based on subscriberId
+            .where("subscribedToId")
+            .eq(subscribedToId) // Query based on subscribedToId
+            .exec();
+        if (results.length == 0) {
 
             const newSubscription = new Subscription({
                 _id: uuidv4(),
@@ -21,12 +21,12 @@ router.post('/', async (req, res) => {
                 subscribedToId,
                 createdAt: Date.now()
             });
-            
+
             await newSubscription.save();
             res.status(201).json({ message: 'Subscription created successfully', data: newSubscription });
         }
-        else{
-            res.json({message:"already subscribed"})
+        else {
+            res.json({ message: "already subscribed" })
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const subscriptions = await Subscription.scan().exec();
-        res.status(200).json({count:subscriptions.length,data:subscriptions});
+        res.status(200).json({ count: subscriptions.length, data: subscriptions });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -48,13 +48,19 @@ router.get('/my/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const subscriptions = await Subscription.scan('subscribedToId').eq(id).exec();
-        const data = await Promise.all(subscriptions.map(async (e) =>{
-            const user = await User.get(e.subscriberId)
-            return {
-                ...e,user  
-             }                
-            }))
-        const filterData=data.filter((e)=>e.user.Users_PK!=null)
+        const data = await Promise.all(subscriptions.map(async (e) => {
+            try {
+                
+                const user = await User.get(e.subscriberId)
+                return {
+                    ...e, user
+                }
+            } catch (error) {
+                return null
+
+            }
+        }))
+        const filterData = data.filter((e) => e != null)
         res.status(200).json(filterData);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -66,12 +72,17 @@ router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const subscriptions = await Subscription.scan('subscriberId').eq(id).exec();
-        const data = await Promise.all(subscriptions.map(async (e) =>{
-            const user = await User.get(e.subscribedToId)
-            return {
-                ...e,user  
-        }}))
-        const filterData=data.filter((e)=>e.user.Users_PK!=null)
+        const data = await Promise.all(subscriptions.map(async (e) => {
+            try {
+                const user = await User.get(e.subscribedToId)
+                return {
+                    ...e, user
+                }
+            } catch (error) {
+                return null
+            }
+        }))
+        const filterData = data.filter((e) => e != null)
         res.status(200).json(filterData);
     } catch (error) {
         res.status(500).json({ message: error.message });
