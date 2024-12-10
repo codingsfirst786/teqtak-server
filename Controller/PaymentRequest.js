@@ -7,11 +7,18 @@ const { v4: uuidv4 } = require('uuid');
 
 const create=async(req,res)=>{
     try {
+
+
+
+        const checkPayReq = await PaymentRequest.scan('eventId').eq(req.body.eventId).exec()
+        if(checkPayReq && checkPayReq.length>0) return res.json({message:"error",info:"Already exists"})
+       
+       
         // check 
         const event = await Event.get(req.body.eventId)
         const user = await User.get(req.body.userId)
-        if(user == null || user == undefined ) return res.json({message:error,info:"provide valid data"})
-        if(event == null || event == undefined ) return res.json({message:error,info:"provide valid data"})
+        if(user == null || user == undefined ) return res.json({message:"error",info:"provide valid data"})
+        if(event == null || event == undefined ) return res.json({message:"error",info:"provide valid data"})
 
         // data cleaning
         const UnSafe_Data = {...req.body,amount:""}
