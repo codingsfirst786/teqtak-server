@@ -30,9 +30,7 @@ const __CORS_ORIGINS__=[process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'https
 
 app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  // origin: "*", // Your frontend URL
   origin: __CORS_ORIGINS__, // Your frontend URL
-  // origin: [process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'https://teqtak-admin-panel.vercel.app' ], // Your frontend URL
   credentials: true 
 })); 
 app.use(cookie())
@@ -44,18 +42,19 @@ const server = http.createServer(app);
 const io = new socketIo.Server(server, {
   cors: {
     origin:  __CORS_ORIGINS__, 
-    // origin:  process.env.FRONT_URL, 
-    // origin: "http://localhost:5173", // Adjust to match your React app's URL and port
   },
 });
 // sockets end
 
 // routes
 
-
+// OAuth @2.O
 app.use('/', require('./Routes/GithubAuth'))
 app.use('/', require('./Routes/FacebookAuth'))
 app.use('/', require('./Routes/GoogleAuth'))
+
+
+
 app.use('/cookies', require('./Routes/cookie-check'))
 app.use('/users', require('./Routes/User'))
 app.use('/jobs', require('./Routes/Job'))
@@ -83,26 +82,6 @@ app.use('/payreq', require('./Routes/PaymentRequest'))
 
 
 // routes end
-const fun =async()=>{
-  // const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-  // console.log(paymentIntent);
-  const successfulPaymentIntents = await stripe.paymentIntents.list({
-    limit: 10,  // Adjust the limit based on how many you want to retrieve
-    // status: 'succeeded',  // Filter for successful payments
-  });
-  const d = successfulPaymentIntents.data.filter((e)=>e.status=='succeeded')
-  
-  // console.log({d});
-  const mt= d.map((e)=>{
-    console.log("metadata")
-    console.log(e.metadata)
-  })
-  // This will give an array of successful PaymentIntent objects
-  // console.log(successfulPaymentIntents);  // This will give an array of successful PaymentIntent objects
-  
-// console.log(paymentIntents.data); 
-}
-// fun() 
 
 // Use the socket handler
 socketHandler(io);
