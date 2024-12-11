@@ -77,8 +77,8 @@ app.get('/auth/github/callback',
       user: _id
     }
     const authtoken = jwt.sign(payload, process.env.JWT_SECRET);
-    res.cookie('user',_id);
-    res.cookie('jwt', authtoken, { httpOnly: true, secure: false })
+    // res.cookie('user',_id);
+    // res.cookie('jwt', authtoken, { httpOnly: true, secure: false })
     res.redirect(`${process.env.FRONT_URL}/bording?authtoken=${authtoken}&user=${_id}`)
    
     }

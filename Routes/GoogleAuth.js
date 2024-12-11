@@ -55,16 +55,6 @@ passport.use(
   )
 )
 
-// passport.serializeUser((user, done) => {
-//   // console.log('Serializing user:', user); // Debug: log user being serialized
-//   done(null, user);
-// });
-
-// passport.deserializeUser((user, done) => {
-//   // console.log('Deserializing user:', user); // Debug: log user being deserialized
-//   done(null, user);
-// });
-
 // initial google ouath login
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
@@ -78,22 +68,13 @@ app.get('/auth/google/callback',
       user: _id
     }
     const authtoken = jwt.sign(payload, process.env.JWT_SECRET);
-    res.cookie('user',_id,{httpOnly:false});
-    res.cookie('jwt', authtoken, { httpOnly: true, secure: true ,sameSite: 'None',})
+    // res.cookie('user',_id,{httpOnly:false});
+    // res.cookie('jwt', authtoken, { httpOnly: true, secure: true ,sameSite: 'None',})
     res.redirect(`${process.env.FRONT_URL}/bording?authtoken=${authtoken}&user=${_id}`)
   }
 );
 
-// // double redirect
-// app.get('/boarding',async(req,res)=>{
-//   const {authtoken,user} = req.query
-//   console.log({query:req.query})
-//   res.cookie('user',user);
-//   res.cookie('jwt', authtoken, { httpOnly: true, secure: true ,sameSite: 'None'})
-//   res.redirect(`${process.env.FRONT_URL}/bording?authtoken==${authtoken}&user=${user}`)
 
-
-// })
 
 app.get("/logout", (req, res, next) => {
   req.logout(function (err) {
