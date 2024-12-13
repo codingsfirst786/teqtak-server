@@ -39,9 +39,9 @@ const createMeeting = async (req, res) => {
     // meeting logic end
 
     await newMeeting.save();
-    await nf(
-      null, "created", 'Meeting', `A meeting was created in chatroom id:${req.body.chatroomID}`
-    )
+    // await nf(
+    //   null, "created", 'Meeting', `A meeting was created in chatroom id:${req.body.chatroomID}`
+    // )
 
       // sendmail using user Email
       const receiverId = chatRoom.users.filter((e) => e != sender)
