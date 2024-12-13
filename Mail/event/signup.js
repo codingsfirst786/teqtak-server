@@ -13,7 +13,7 @@ const Signup_Mail = async (email) => {
             const mailOptions = {
             from: process.env.ADMIN_EMAIL,
             to: email,
-            subject: subject_Title,
+            subject: "Welcome to Teqtak RIE",
             html: signup
         };
 
