@@ -3,7 +3,8 @@ const ChatRoom = require('../Schemas/ChatRoom')
 const Users = require('../Schemas/User')
 const { v4: uuidv4 } = require('uuid');
 const nf = require('../Functions/Notification_Factory')
-const {Logger} = require('../Functions/Logger')
+const {Logger} = require('../Functions/Logger');
+const { meeting_Mail } = require('../Mail/event/meeting');
 
 
 const createMeeting = async (req, res) => {
@@ -53,6 +54,7 @@ const createMeeting = async (req, res) => {
       
     
     // get email
+     if(receiverData && receiverData.email) await meeting_Mail(receiverData.email,title,agenda)
     // send email
 
     res.json({ message: "success", data: newMeeting });
