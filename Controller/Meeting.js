@@ -45,8 +45,11 @@ const createMeeting = async (req, res) => {
 
       // sendmail using user Email
       const receiverId = chatRoom.users.filter((e) => e != sender)
+      console.log({receiverId})
       const senderData = await Users.get(sender)
+      console.log({senderData})
       const receiverData = await Users.get(receiverId[0])
+      console.log({receiverData})
       
     
     // get email
