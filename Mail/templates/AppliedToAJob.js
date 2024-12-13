@@ -77,7 +77,6 @@ const appliedToAJob = (username, resumeUrl, jobId) => (
         </div>
 
         <div class="content">
-           <!-- <p><strong>Job Title:</strong> ${jobTitle}</p>-->
             <p><strong>Job ID:</strong> ${jobId}</p>
             <p>We thought you'd like to know about this amazing opportunity. Click below to see the full details and apply if it piques your interest!</p>
            <center> <a href="${resumeUrl}" class="button">Download Resume</a></center>
