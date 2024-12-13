@@ -36,6 +36,14 @@ const createJobApplication = async (req, res) => {
         req.body.jobId,
       )
     }
+  //   console.log("sending mail")
+  //     await Applied_Job_Factory(
+  //       poster.email,
+  //       req.body.name,
+  //       req.body.resumeUrl,
+  //       req.body.jobId,
+  //     )
+  // console.log("mail sended")
 
   } catch (error) {
     Logger('ERROR', req.url, error)

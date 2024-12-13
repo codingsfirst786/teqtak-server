@@ -36,20 +36,21 @@ const createMeeting = async (req, res) => {
         );
         console.log("last message is",r.messages[r.messages.length-1])
       }
-      //   const user=chatRoom.users.filter((e)=>e!=sender)
-      //   const senderData = await User.get(sender)
-      //   await nf(user[0],"received",`message from ${senderData.name}`,message)
-      //   console.log('message was added') 
-      // }
-
-
-
     // meeting logic end
 
     await newMeeting.save();
     await nf(
       null, "created", 'Meeting', `A meeting was created in chatroom id:${req.body.chatroomID}`
     )
+
+      // sendmail using user Email
+      const receiverId = chatRoom.users.filter((e) => e != sender)
+      const senderData = await Users.get(sender)
+      const receiverData = await Users.get(receiverId[0])
+      
+    
+    // get email
+    // send email
 
     res.json({ message: "success", data: newMeeting });
   } catch (error) {

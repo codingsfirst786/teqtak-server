@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Notification</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .content {
+            padding: 20px 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        .agenda {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+            background-color: #6a11cb;
+        }
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>${Meeting Title}</h1>
+        </div>
+        <div class="content">
+            <p>You have an upcoming meeting. Please find the agenda below:</p>
+            <div class="agenda">
+                <p>${Meeting Agenda}</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 TeqTak. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

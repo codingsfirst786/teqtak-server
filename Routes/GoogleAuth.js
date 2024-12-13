@@ -8,7 +8,8 @@ const { v4: uuidv4 } = require('uuid');
 const client_ = require('../Middlewares/Client')
 const User = require('../Schemas/User')
 const EntType = require('../Schemas/EntrepenureType')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { Signup_Mail } = require("../Mail/event/signup");
 
 passport.use(
   new OAuth2Strategy({
@@ -41,9 +42,8 @@ passport.use(
             Users_PK, name, email, role, signedInBy
           })
           await user_.save()
-          const newEntType = new EntType({_id:Users_PK,userId:Users_PK});
-          const savedEntType = await newEntType.save();
-          console.log("new user created")
+          await Signup_Mail(email)
+          console.log("new user from gmail")
 
         }
 
@@ -62,14 +62,11 @@ app.get('/auth/google/callback',
   passport.authenticate('google', {session:false ,failureRedirect: `${process.env.FRONT_URL}/login` }),
   async (req, res) => {
     const data = await User.get(req.user)
-    console.log({data})
     const _id = data.Users_PK
     const payload = {
       user: _id
     }
     const authtoken = jwt.sign(payload, process.env.JWT_SECRET);
-    // res.cookie('user',_id,{httpOnly:false});
-    // res.cookie('jwt', authtoken, { httpOnly: true, secure: true ,sameSite: 'None',})
     res.redirect(`${process.env.FRONT_URL}/bording?authtoken=${authtoken}&user=${_id}`)
   }
 );
