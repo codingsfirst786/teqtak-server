@@ -4,7 +4,7 @@
  }*/
 
 
-const transport = require("./transport")
+const transport = require("../transport")
 const {signup} = require("../templates/signup")
 
 
