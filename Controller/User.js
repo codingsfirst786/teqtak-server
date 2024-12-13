@@ -9,7 +9,8 @@ const Pic = require('../Schemas/Picture')
 const jwt = require('jsonwebtoken')
 const nf = require('../Functions/Notification_Factory')
 const EntType = require('../Schemas/EntrepenureType')
-const {Logger} = require('../Functions/Logger')
+const {Logger} = require('../Functions/Logger');
+const { Signup_Mail } = require('../Mail/event/signup');
 
 
 // to do add fun
@@ -21,29 +22,23 @@ const createUser = async (req, res) => {
         // pre check
         const u = await User.scan('email').eq(req.body.email).exec()
         if (!req.body.password) return res.send("please enter password")
-        console.log(req.body.email)
         if (u.length == 0) {
             console.log("creating new user")
             const newUser = new User({ Users_PK, signedInBy, ...req.body });
             await newUser.save();
-            const newEntType = new EntType({ _id: Users_PK, userId: Users_PK });
-            const savedEntType = await newEntType.save();
+          
 
             await nf(
                 Users_PK, "created", 'user', `A user was created of id:${Users_PK}`
             )
-            const expirationDate = new Date(Date.now() + 3600 * 1000);
             const authtoken = jwt.sign({ _id: newUser.Users_PK }, process.env.JWT_SECRET);
-            res.cookie('user', newUser.Users_PK, { httpOnly: false, expires: expirationDate, path: '/' });
-            res.cookie('jwt', authtoken, { httpOnly: true, secure: true, sameSite: 'None', expires: expirationDate, path: '/' });
-
             const user = await User.get(newUser.Users_PK)
             const data_ = {
                 authtoken,
                 user: { ...user, password: undefined }
             }
-            console.log({ data_ })
             res.json(data_);
+            await Signup_Mail(req.body.email)
         }
         else {
             console.log("already a user")
