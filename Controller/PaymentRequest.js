@@ -44,7 +44,9 @@ const create=async(req,res)=>{
 }
 const getOne=async(req,res)=>{
     try {
-        let data = await PaymentRequest.scan('userId').eq(req.body.userId).exec()
+        // let data = await PaymentRequest.scan().exec()
+        let data = await PaymentRequest.scan('userId').eq(req.params.id).exec()
+        console.log({data})
         data = await Promise.all(data.map(async(e)=>{
             try {
                 const event = await Event.get(e.eventId) 
