@@ -44,8 +44,18 @@ const create=async(req,res)=>{
 }
 const getOne=async(req,res)=>{
     try {
-        const data = await PaymentRequest.get(req.params.id)
-        res.json(data)
+        let data = await PaymentRequest.scan('userId').eq(req.body.userId).exec()
+        data = await Promise.all(data.map(async(e)=>{
+            try {
+                const event = await Event.get(e.eventId) 
+                const user = await User.get(e.userId)
+                return {...e,event,user}
+            } catch (error) {
+                return null
+            }
+        }))
+        
+        res.json({count:data.length,data})
         Logger('success',req.method+req.originalUrl)
     } catch (error) {
         Logger('ERROR',req.url,error)
