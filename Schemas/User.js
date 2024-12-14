@@ -52,6 +52,7 @@ const userSchema = new dynamoose.Schema({
     longitude:String,
     fbId:String,
     ghId:String,
+    roleUpdate:String,
     interests:{
         type:Array,
         schema: [String],
