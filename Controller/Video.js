@@ -3,14 +3,16 @@
 const { client, PutItemCommand, GetItemCommand, UpdateItemCommand, DeleteItemCommand, ScanCommand } = require('../Config/aws-dynamoDB')
 const { v4: uuidv4 } = require('uuid');
 const { GetObjectCommand, DeleteObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
-const { Readable } = require('stream'); 
+const { Readable } = require('stream');
 const s3 = require("../Config/aws-s3")
 const Video = require('../Schemas/Videos')
 const User = require('../Schemas/User')
 const Comments = require('../Schemas/VideoComments')
 const Reviews = require('../Schemas/Reviews')
 const Views = require('../Schemas/Views')
-const {Logger} = require('../Functions/Logger')
+const { Logger } = require('../Functions/Logger');
+const Subscription = require('../Schemas/Subscription');
+const { subscribe } = require('diagnostics_channel');
 
 
 
@@ -21,14 +23,14 @@ const uploadVideo = async (req, res) => {
   if (!req.file) {
     return res.status(400).send('Error: No file uploaded');
   }
-  try{
-  const userId = req.params.id
-  const videoUrl = req.file.location
-  const videoName = req.file.key
-  const { videoDesc, videoVisibility } = req.body
-  const videoTags = req.body.videoTags ? JSON.parse(req.body.videoTags) : ['general']
-  console.log({ videoTags })
-  console.log({ userId, videoName, videoUrl, videoDesc, videoVisibility, videoTags })
+  try {
+    const userId = req.params.id
+    const videoUrl = req.file.location
+    const videoName = req.file.key
+    const { videoDesc, videoVisibility } = req.body
+    const videoTags = req.body.videoTags ? JSON.parse(req.body.videoTags) : ['general']
+    console.log({ videoTags })
+    console.log({ userId, videoName, videoUrl, videoDesc, videoVisibility, videoTags })
     const _id = uuidv4();
     const vid = new Video({
       _id,
@@ -86,7 +88,6 @@ const getUserVideos = async (req, res) => {
 const getVideo = async (req, res) => {
   try {
     const vid = await Video.get(req.params.id)
-    // console.log({vid:vid.userId})
     const com = await Reviews.scan('reviewItemId').eq(req.params.id).exec()
     // exp
     const _id = uuidv4()
@@ -105,8 +106,18 @@ const getVideo = async (req, res) => {
     await view.save()    
   }
     // exp  end
+
+    // // is follwer
+    // const viewerId = req.user || ""
+    // let subscriptions = await Subscription.scan('subscriberId').eq(viewerId).attributes(['subscribedToId']).exec();
+    // subscriptions = subscriptions.map((e) => e.subscribedToId)
+    // const isFollower = subscriptions.includes(vid.userId)
+
+    // // is follwer end
+
+
     const user = await User.get(vid.userId);
-    res.json({ data: vid, commments: com, user: {...user,password:undefined} })
+    res.json({data: vid, commments: com, user: { ...user, password: undefined } })
   } catch (error) {
     console.log(error)
     res.json({ message: "error occured", error })
@@ -128,7 +139,7 @@ const getMyFeed = async (req, res) => {
   // get user feed
   const user = await User.get(req.params.id)
   const myFeed = user.videoTags ? user.videoTags : ['general']
-  console.log({myFeed})
+  console.log({ myFeed })
   // get videos of that feed
   const videos = await Video.scan().exec()
   // const feed = await Promise.all(videos.map(async (e) => {
@@ -149,7 +160,7 @@ const getMyFeed = async (req, res) => {
 
   // Remove null values (non-matching videos)
   const filteredFeed = feed.filter(video => video !== null);
-  res.json({filteredFeed})
+  res.json({ filteredFeed })
 
 
 
@@ -180,22 +191,22 @@ const deleteVideo = async (req, res) => {
 }
 
 
-const __init__=async(req,res)=>{
-  try{
+const __init__ = async (req, res) => {
+  try {
 
     const vidoes = await Video.scan().exec()
-    const data= await Promise.all(vidoes.map(async(e)=>{
+    const data = await Promise.all(vidoes.map(async (e) => {
       const vid = await Video.get(e._id)
       // const com = await Reviews.scan('reviewItemId').eq(e._id).exec()
-         // Get user details, check if user exists
-         const userData = await User.get(vid.userId);
-         const user = userData ? { ...userData, password: undefined } : null;
+      // Get user details, check if user exists
+      const userData = await User.get(vid.userId);
+      const user = userData ? { ...userData, password: undefined } : null;
       return { data: vid, user: user }
       // return { data: vid, commments: com, user: user }
     }))
-    const reversedData= data.reverse()
-    res.json({count:data.length,data:reversedData})
-  }catch(e){
+    const reversedData = data.reverse()
+    res.json({ count: data.length, data: reversedData })
+  } catch (e) {
     console.log(e)
     res.send("internal server error")
   }
@@ -203,4 +214,4 @@ const __init__=async(req,res)=>{
 }
 
 
-module.exports = { uploadVideo, viewVideo, getMyFeed, getUserVideos, getAllVideos, getVideo, deleteVideo ,__init__}
+module.exports = { uploadVideo, viewVideo, getMyFeed, getUserVideos, getAllVideos, getVideo, deleteVideo, __init__ }
