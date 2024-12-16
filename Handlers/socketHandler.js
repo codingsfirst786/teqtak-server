@@ -59,7 +59,7 @@ const socketHandler = (io) => {
 
         console.log("sending media")
         const data = message
-        const text = await saveToStorage(data.data, data.name, data.type, "image")
+        const text = await saveToStorage(data.data, data.name, data.type, data.tag)
 
         const timestamp = new Date();
         let chatRoom = await ChatRoom.get(roomId);

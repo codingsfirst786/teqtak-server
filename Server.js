@@ -40,6 +40,7 @@ app.use(cookie())
 // sockets
 const server = http.createServer(app);
 const io = new socketIo.Server(server, {
+  maxHttpBufferSize: 7e6, // Default is 1 MB; adjust as needed
   cors: {
     origin:  __CORS_ORIGINS__, 
   },
