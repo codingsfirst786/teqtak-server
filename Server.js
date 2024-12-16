@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ limit:mbUploadLimit, extended: true }));
  
 
 
-const __CORS_ORIGINS__=[process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'https://teqtak-admin-panel.vercel.app','http://localhost:5173']
+const __CORS_ORIGINS__=[process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'http://localhost:5173']
 
 app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

@@ -22,6 +22,8 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user
+        console.log("google",{accessToken})
+        console.log("google",{profile})
         const name = profile.name.givenName
         const email = profile.email
         const role = 'viewer'

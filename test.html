@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Thumbnail</title>
+</head>
+<body>
+  <h1>Extract Video Thumbnail</h1>
+
+  <!-- Video Element (Hidden) -->
+  <video id="video" src="https://ct-aws.s3.us-east-1.amazonaws.com/1733133699232-12616366_3840_2160_60fps.mp4" style="display: none;" preload="metadata"></video>
+
+  <!-- Canvas Element (Hidden) -->
+  <canvas id="canvas" style="display: none;"></canvas>
+
+  <!-- Image Element to Display Thumbnail -->
+  <img id="thumbnail" alt="Video Thumbnail" />
+
+  <script>
+    // Get references to the elements
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const thumbnail = document.getElementById('thumbnail');
+
+    // Wait until the video metadata is loaded
+    video.addEventListener('loadeddata', () => {
+      // Set the canvas size to match the video dimensions
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Draw the first frame of the video onto the canvas
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert the canvas content to a Base64 image URL
+      const dataURL = canvas.toDataURL('image/png');
+
+      // Set the thumbnail image source to the Base64 URL
+      thumbnail.src = dataURL;
+    });
+
+    // Load the video to trigger the 'loadeddata' event
+    video.load();
+  </script>
+</body>
+</html>
