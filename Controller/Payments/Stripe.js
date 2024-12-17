@@ -7,10 +7,17 @@ const jwt = require('jsonwebtoken');
 const jwtGen = (data) => jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '15m' });
   
 
+// const ticketPrice = (ticketName, ticketArray) => {
+//   const ticket = ticketArray.filter((e) => e.ticketType == ticketName)
+//   return ticket[0].price
+// }
 const ticketPrice = (ticketName, ticketArray) => {
-  const ticket = ticketArray.filter((e) => e.ticketType == ticketName)
-  return ticket[0].price
-}
+  const ticket = ticketArray.find((e) => e.ticketType === ticketName);
+  console.log({ ticket, ticketName, ticketArray });
+  return ticket ? ticket.price : 0; // Return 0 if no ticket matches
+};
+
+
 const getLineItems = (proArray, event) => {
   // prodArray will have ticket name with there quantity.....
   //meanwhile event will have event object
