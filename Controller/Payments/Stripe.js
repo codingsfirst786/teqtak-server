@@ -51,6 +51,8 @@ const paymentByStripe = async (req, res) => {
     ticketMetadata:JSON.stringify({purchase_units: products}),
     totalAmount:Total_Factory(products,event)
   }
+  console.log({products,event})
+  console.log("body is",req.body)
 
   try {
     const session = await stripe.checkout.sessions.create({
