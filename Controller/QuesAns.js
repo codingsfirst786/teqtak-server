@@ -1,7 +1,7 @@
 const Answer = require("../Schemas/Answers");
 const Question = require("../Schemas/Questions")
 const { v4: uuidv4 } = require('uuid');
-const {Logger} = require('../Functions/Logger')
+const { Logger } = require('../Functions/Logger')
 
 
 const getAllQues = async (req, res) => {
@@ -17,8 +17,15 @@ const getAllQues = async (req, res) => {
 const getMyQues = async (req, res) => {
     try {
         console.log("get MY Ques")
-        console.log(req.params.id)
-        const ques = await Question.scan("userRole").eq(req.params.id).exec()
+        let ans = await Answer.scan('userId').eq(req.query.userid).attributes(['questionId', 'answer']).exec()
+        let ques = await Question.scan("userRole").eq(req.params.id).exec()
+        const map = new Map(ans.map(e => [e.questionId,e.answer]));
+        ques = ques.map((e)=>{
+            return {
+                ...e,
+                answer:map.get(e._id)
+            }
+        })
         res.json(ques)
     } catch (error) {
         console.log({ error })
@@ -89,11 +96,11 @@ const deleQues = async (req, res) => {
 
     try {
         const del = await Question.delete(req.params.id)
-        res.json({message:"success"})
-        
+        res.json({ message: "success" })
+
     } catch (error) {
-        console.log({error})
-        res.json({message:"error"})
+        console.log({ error })
+        res.json({ message: "error" })
     }
 }
 const getMyAns = async (req, res) => {
@@ -103,13 +110,13 @@ const getMyAns = async (req, res) => {
         try {
             const { question } = await Question.get(e.questionId)
             return { ...e, question }
-            
+
         } catch (error) {
-           return null 
+            return null
         }
 
     }))
-    const filteredData = data.filter((e)=>e!=null)
+    const filteredData = data.filter((e) => e != null)
     res.json(filteredData)
 }
 
