@@ -6,10 +6,16 @@ const User = require('../../Schemas/User')
 const jwt = require('jsonwebtoken');
 
 const jwtGen = (data) => jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '15m' });
+// const ticketPrice = (ticketName, ticketArray) => {
+//     const ticket = ticketArray.filter((e) => e.ticketType == ticketName)
+//     console.log({ticket,ticketName,ticketArray})
+//     return ticket[0].price
+// }
 const ticketPrice = (ticketName, ticketArray) => {
-    const ticket = ticketArray.filter((e) => e.ticketType == ticketName)
-    return ticket[0].price
-}
+    const ticket = ticketArray.find((e) => e.ticketType === ticketName);
+    console.log({ ticket, ticketName, ticketArray });
+    return ticket ? ticket.price : 0; // Return 0 if no ticket matches
+};
 
 
 
@@ -37,7 +43,7 @@ const paymentByPayPal = async (req, res) => {
     console.log({body:req.body})
     const event = await Event.get(req.body.eventId);
     const products = Object.entries(req.body.eventTicketArray).map(([name_, quantity]) => ({ name_, quantity }));
-    console.log({ total: Total_Factory(products, event) })
+    console.log({products })
 
     const metadata = {
         ticketEventId: req.body.eventId,
