@@ -162,7 +162,9 @@ const __init__ = async (req, res) => {
     try {
       const vid = await Video.get(e._id)
       let user = await User.get(vid.userId);
+      if(user == null || user == undefined) throw new Error("user invalid")
       user = { ...user, password: undefined }
+      
       return { data: vid, user: user }
     } catch (e) {
       return null
