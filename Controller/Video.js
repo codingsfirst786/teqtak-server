@@ -13,6 +13,7 @@ const Views = require('../Schemas/Views')
 const { Logger } = require('../Functions/Logger');
 const Subscription = require('../Schemas/Subscription');
 const { subscribe } = require('diagnostics_channel');
+const { shuffleArray } = require('../Functions/Shuffle');
 
 
 
@@ -72,17 +73,17 @@ const getVideo = async (req, res) => {
     const viewerId = req.cookies.user || ''
     const viewItemId = req.params.id
     const viewItemType = 'video'
-   
-    const existingView = await Views.scan()
-    .where("viewerId").eq(viewerId)
-    .and()
-    .where("viewItemId").eq(viewItemId)
-    .exec();
 
-  if (existingView.count == 0) {
-    const view = new Views({_id,viewItemId,viewerId,viewItemType})
-    await view.save()    
-  }
+    const existingView = await Views.scan()
+      .where("viewerId").eq(viewerId)
+      .and()
+      .where("viewItemId").eq(viewItemId)
+      .exec();
+
+    if (existingView.count == 0) {
+      const view = new Views({ _id, viewItemId, viewerId, viewItemType })
+      await view.save()
+    }
     // exp  end
 
     // // is follwer
@@ -95,7 +96,7 @@ const getVideo = async (req, res) => {
 
 
     const user = await User.get(vid.userId);
-    res.json({data: vid, commments: com, user: { ...user, password: undefined } })
+    res.json({ data: vid, commments: com, user: { ...user, password: undefined } })
   } catch (error) {
     console.log(error)
     res.json({ message: "error occured", error })
@@ -122,7 +123,7 @@ const getMyFeed = async (req, res) => {
     if (myFeed.some((pref) => video.videoTags && video.videoTags.includes(pref))) {
       return video;
     }
-    return null; 
+    return null;
   }));
 
   const filteredFeed = feed.filter(video => video !== null);
@@ -156,22 +157,25 @@ const deleteVideo = async (req, res) => {
 
 
 const __init__ = async (req, res) => {
-  try {
-    const vidoes = await Video.scan().exec()
-    const data = await Promise.all(vidoes.map(async (e) => {
+  const vidoes = await Video.scan().exec()
+  let data = await Promise.all(vidoes.map(async (e) => {
+    try {
       const vid = await Video.get(e._id)
-      const userData = await User.get(vid.userId);
-      const user = userData ? { ...userData, password: undefined } : null;
+      let user = await User.get(vid.userId);
+      user = { ...user, password: undefined }
       return { data: vid, user: user }
-    }))
-    const reversedData = data.reverse()
-    res.json({ count: data.length, data: reversedData })
-  } catch (e) {
-    console.log(e)
-    res.send("internal server error")
-  }
+    } catch (e) {
+      return null
+    }
+  }))
+
+  data = data.filter((e) => e != null)
+  data = shuffleArray(data)
+  const reversedData = data.reverse()
+  res.json({ count: data.length, data: reversedData })
+
 
 }
 
 
-module.exports = { uploadVideo, viewVideo, getMyFeed, getUserVideos, getAllVideos, getVideo, deleteVideo, __init__ }
+module.exports = { uploadVideo, getMyFeed, getUserVideos, getAllVideos, getVideo, deleteVideo, __init__ }
