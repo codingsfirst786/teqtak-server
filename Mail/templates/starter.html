@@ -1,118 +1,121 @@
 <!DOCTYPE html>
-    <html lang="en">
-    
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Email Template</title>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #ffffff;
-        }
-    
-        .email-container {
-          margin: 20px auto;
-            /* padding: 20px; */
-            max-width: 600px;
-            background-color: #ffffff;
-            color: #333333;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border: 2px solid black;
-        }
-    
-        .email-header {
-          padding: 20px;
-            background: linear-gradient(135deg, #2575fc, #6a11cb);
-            border-radius: 10px 10px 0 0;
-            color: #ffffff;
-        }
-    
-        .email-header h1 {
-          margin: 0;
-          font-size: 24px;
-        }
-    
-        .email-body {
-          padding: 20px;
-        }
-    
-        .email-body p {
-          line-height: 1.6;
-          font-size: 16px;
-          margin: 0 0 10px;
-        }
-    
-        .email-button {
-          display: inline-block;
-            padding: 10px 20px;
-            margin: 20px 0;
-            color: #ffffff;
-            background: #6a11cb;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-    
-        .email-footer {
-          padding: 6px;
-            border-bottom-right-radius: 7px;
-            border-bottom-left-radius: 7px;
-            text-align: center;
-            font-size: 14px;
-            color: white;
-            background-color: #6a11cb;
-            border-bottom: 2rem;
-        }
-    
-        .email-footer a {
-          color: #4CAF50;
-          text-decoration: none;
-        }
-    
-        @media (max-width: 600px) {
-          .email-container {
-            margin: 10px;
-          }
-    
-          .email-header h1 {
-            font-size: 20px;
-          }
-    
-          .email-body p {
-            font-size: 14px;
-          }
-    
-          .email-button {
-            font-size: 14px;
-            padding: 8px 16px;
-          }
-        }
-      </style>
-    </head>
-    
-    <body>
-      <div class="email-container">
-        <div class="email-header">
-          <h1>Welcome to TeqTak!</h1>
-        </div>
-        <div class="email-body">
-          <p>Hello ${userName},</p>
-          <p>Thank you for signing up for our service. We're excited to have you on board!</p>
-          <p>Click the button below to get started:</p>
-          <a href="[Your Action URL]" class="email-button">Get Started</a>
-          <p>${desc?desc:""}</p>
-          <p>Best regards,</p>
-          <p><strong>TeqTak</strong></p>
-        </div>
-        <div class="email-footer">
-          <p>You received this email because you signed up for TeqTak</p>
-        </div>
-      </div>
-    </body>
-    
-    </html>
- 
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Template</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #ffffff;
+    }
+
+    .email-container {
+      margin: 20px auto;
+      /* padding: 20px; */
+      max-width: 600px;
+      background-color: #ffffff;
+      color: #333333;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border: 2px solid black;
+    }
+
+    .email-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      border-radius: 10px 10px 0 0;
+      color: #ffffff;
+    }
+
+    .email-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .email-body {
+      padding: 20px;
+    }
+
+    .email-body p {
+      line-height: 1.6;
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+
+    .email-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 20px 0;
+      color: #ffffff;
+      background: #6a11cb;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .email-footer {
+      padding: 6px;
+      border-bottom-right-radius: 7px;
+      border-bottom-left-radius: 7px;
+      text-align: center;
+      font-size: 14px;
+      color: white;
+      background-color: #6a11cb;
+      border-bottom: 2rem;
+    }
+
+    .email-footer a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .email-container {
+        margin: 10px;
+      }
+
+      .email-header h1 {
+        font-size: 20px;
+      }
+
+      .email-body p {
+        font-size: 14px;
+      }
+
+      .email-button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <center>
+
+        <h1>🎈 Welcome to TeqTak 🎈</h1>
+
+      </center>
+    </div>
+    <div class="email-body">
+      <p>Hello ${userName},</p>
+      <p>Thank you for signing up for our service. We're excited to have you on board!</p>
+      <p>Click the button below to get started:</p>
+      <a href="[Your Action URL]" class="email-button">Get Started</a>
+      <p>${desc?desc:""}</p>
+      <p>Best regards,</p>
+      <p><strong>TeqTak</strong></p>
+    </div>
+    <div class="email-footer">
+      <p>You received this email because you signed up for TeqTak</p>
+    </div>
+  </div>
+</body>
+
+</html>
