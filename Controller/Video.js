@@ -51,28 +51,6 @@ const uploadVideo = async (req, res) => {
   }
 
 }
-const viewVideo = async (req, res) => {
-  console.log("range is")
-  console.log(req.headers.range)
-  try {
-
-    const key = req.params.id;
-    console.log(key)
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: key,
-    };
-    const command = new GetObjectCommand(params);
-    const response = await s3.send(command);
-    // Stream the response body to the client
-    const stream = Readable.from(response.Body);
-    stream.pipe(res);
-  } catch (error) {
-    res.send("error occured")
-
-  }
-
-}
 
 const getUserVideos = async (req, res) => {
   try {
@@ -136,29 +114,17 @@ const getAllVideos = async (req, res) => {
 
 }
 const getMyFeed = async (req, res) => {
-  // get user feed
+
   const user = await User.get(req.params.id)
   const myFeed = user.videoTags ? user.videoTags : ['general']
-  console.log({ myFeed })
-  // get videos of that feed
   const videos = await Video.scan().exec()
-  // const feed = await Promise.all(videos.map(async (e) => {
-  //        for(let i =0;i<myFeed.length;i++){
-  //            if(e.videoTags.include(myFeed[i])){
-  //             return e
-  //            }
-  //        }
-  // }
-  // )
-  // )
   const feed = await Promise.all(videos.map(async (video) => {
     if (myFeed.some((pref) => video.videoTags && video.videoTags.includes(pref))) {
       return video;
     }
-    return null; // Return null for videos that don't match
+    return null; 
   }));
 
-  // Remove null values (non-matching videos)
   const filteredFeed = feed.filter(video => video !== null);
   res.json({ filteredFeed })
 
@@ -180,8 +146,6 @@ const deleteVideo = async (req, res) => {
 
     const command = new DeleteObjectCommand(params);
     await s3.send(command);
-
-    // Optionally, remove the file reference from the database
     await Video.delete(Id);
 
     res.status(200).json({ message: 'File deleted successfully' });
@@ -193,16 +157,12 @@ const deleteVideo = async (req, res) => {
 
 const __init__ = async (req, res) => {
   try {
-
     const vidoes = await Video.scan().exec()
     const data = await Promise.all(vidoes.map(async (e) => {
       const vid = await Video.get(e._id)
-      // const com = await Reviews.scan('reviewItemId').eq(e._id).exec()
-      // Get user details, check if user exists
       const userData = await User.get(vid.userId);
       const user = userData ? { ...userData, password: undefined } : null;
       return { data: vid, user: user }
-      // return { data: vid, commments: com, user: user }
     }))
     const reversedData = data.reverse()
     res.json({ count: data.length, data: reversedData })

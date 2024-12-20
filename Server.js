@@ -30,7 +30,7 @@ const __CORS_ORIGINS__=[process.env.FRONT_URL,process.env.ADMIN_PANEL_URL,'http:
 
 app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  origin: __CORS_ORIGINS__, // Your frontend URL
+  origin: __CORS_ORIGINS__,
   credentials: true 
 })); 
 app.use(cookie())
@@ -40,15 +40,15 @@ app.use(cookie())
 // sockets
 const server = http.createServer(app);
 const io = new socketIo.Server(server, {
-  maxHttpBufferSize: 7e6, // Default is 1 MB; adjust as needed
+  maxHttpBufferSize: 7e6, // 7 MB
   cors: {
     origin:  __CORS_ORIGINS__, 
   },
 });
 // sockets end
 
-// routes
 
+// routes
 // OAuth @2.O
 app.use('/', require('./Routes/GithubAuth'))
 app.use('/', require('./Routes/FacebookAuth'))
@@ -80,9 +80,9 @@ app.use('/block', require('./Routes/Blocked'))
 app.use('/info', require('./Routes/EntType'))
 app.use('/qna', require('./Routes/QueAns'))
 app.use('/payreq', require('./Routes/PaymentRequest'))
-
-
 // routes end
+
+
 
 // Use the socket handler
 socketHandler(io);
@@ -104,9 +104,7 @@ app.get('/zoom/callback', async (req, res) => {
     });
 
     const { access_token } = response.data;
-    // res.redirect(`${process.env.FRONT_URL}?access_token=${encodeURIComponent(access_token)}`);
     res.redirect(`${process.env.FRONT_URL}/zoom?access_token=${encodeURIComponent(access_token)}`);
-    // res.redirect(`${process.env.FRONT_URL}/messages/user1?access_token=${encodeURIComponent(access_token)}`);
   } catch (error) {
     console.log({error})
     res.status(500).send(error);

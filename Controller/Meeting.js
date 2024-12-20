@@ -122,6 +122,5 @@ module.exports = {
   createMeeting,
   getAllMeetings,
   getMeetingById,
-  // updateMeetingById,
   deleteMeetingById,
 };

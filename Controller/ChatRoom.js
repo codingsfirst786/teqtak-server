@@ -44,10 +44,7 @@ const createChatRoom = async (req, res) => {
 
 const getAllChatRooms = async (req, res) => {
   const cr = await ChatRoom.scan().attributes(['_id', 'users']).exec()
- 
   res.json({ count: cr.length, data: cr })
-
-  // Cat.scan().attributes(["id", "name"]); // Return all items but only return the `id` & `name` properties for each item
 }
 const getMyChatRooms = async (req, res) => {
   try {
